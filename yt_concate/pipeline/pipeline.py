@@ -1,5 +1,6 @@
 from .steps.step import StepException
 
+
 class Pipeline:
     def __init__(self, steps):
         self.steps = steps
@@ -10,5 +11,5 @@ class Pipeline:
             try:
                 data = step.process(data, inputs, utils)
             except StepException as e:
-                print('Exception happend:', e)
+                print('Exception happened:', e)
                 break

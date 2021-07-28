@@ -7,17 +7,24 @@ from yt_concate.settings import API_KEY
 
 class GetVideoList(Step):
     def process(self, data, inputs, utils):
+        print('in get video list')  # 加入了此行，方便同學Debug
+        print(API_KEY)  # 加入了此行，方便同學Debug
+
         channel_id = inputs['channel_id']
 
         if utils.video_list_file_exists(channel_id):
-            print('Found existing video list file for channel id ', channel_id)
+            print('Found existing video list file for channel id', channel_id)
             return self.read_file(utils.get_video_list_filepath(channel_id))
 
         base_video_url = 'https://www.youtube.com/watch?v='
         base_search_url = 'https://www.googleapis.com/youtube/v3/search?'
 
         first_url = base_search_url + 'key={}&channelId={}&part=snippet,id&order=date&maxResults=25'.format(API_KEY,
-                                                                                                            channel_id)
+
+                                                                                              channel_id)
+
+        print(first_url)  # 加入了此行，方便同學Debug，遇403 Error者，請把印出的網址貼到瀏覽器中檢視，會寫錯誤原因
+
         video_links = []
         url = first_url
         while True:
@@ -43,11 +50,9 @@ class GetVideoList(Step):
             for url in video_links:
                 f.write(url + '\n')
 
-
     def read_file(self, filepath):
         video_links = []
         with open(filepath, 'r') as f:
             for url in f:
                 video_links.append(url.strip())
         return video_links
-
